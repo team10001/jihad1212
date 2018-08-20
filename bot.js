@@ -10,6 +10,7 @@ const jimp = require("jimp");
 
 const moment = require("moment")
 
+const prefix = '+';
 
 client.on('ready', () => {
 
@@ -59,3 +60,5 @@ client.user.setGame(`*help | *invite `,"http://twitch.tv/S-F")
   console.log('')
 
 });
+
+client.login(process.env.BOT_TOKEN);
