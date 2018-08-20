@@ -59,32 +59,38 @@ client.on('ready', () => {
 
 });
 
-client.on('message', message => {
-     if(message.content.startsWith(prefix + "clear")) {
-         var args = message.content.split(" ").slice(1);
- if (!message.member.hasPermission('MANAGE_MESSAGES')) return message.reply('You need MANAGE_MESSAGES permission noob');
-  if (!args[0]) return message.channel.send('You didn't provide any number!!!');
+ KiNg66S.on('message', function(KiNg66S) {
+if (KiNg66S.author.bot) return;
+if (KiNg66S.author.id === KiNg66S.user.id) return;
+if (KiNg66S.author.equals(KiNg66S.user)) return;
+if (!KiNg66S.content.startsWith(prefix)) return;
 
-  message.channel.bulkDelete(args[0]).then(() => {
-    const embed = new Discord.RichEmbed()
-      .setColor(0xF16104)
-      .setDescription(Cleared ${args[0]} messages.);
-    message.channel.send({ embed });
-
-    const actionlog = message.guild.channels.find('name', 'logs');
-
-    if (!actionlog) return message.channel.send('Can't find action-log channel. Are you sure that this channel exists and I have permission to view it? CANNOT POST LOG.');
-    const embedlog = new Discord.RichEmbed()
-      .setDescription('~Purge~')
-      .setColor(0xF16104)
-      .addField('Purged By', <@${message.author.id}> with ID ${message.author.id})
-      .addField('Purged in', message.channel)
-      .addField('Time', message.createdAt);
-    actionlog.send(embedlog);
-
-  });
-};
-
+var args = KiNg66S.content.substring(prefix.length).split(' ');
+switch (args[0].toLocaleLowerCase()) {
+case "مسح" :
+KiNg66S.delete()
+if(!KiNg66S.channel.guild) return
+if(KiNg66S.member.hasPermissions(0x2000)){ if (!args[1]) {
+KiNg66S.channel.fetchMessages()
+.then(messages => {
+KiNg66S.channel.bulkDelete(messages);
+var messagesDeleted = messages.array().length;
+KiNg66S.channel.sendMessage(' '+ " " + messagesDeleted + " " +  '**: عدد الرسائل التي تم مسحه**').then(m => m.delete(2500));
+})
+} else {
+let messagecount = parseInt(args[1]);
+KiNg66S.channel.fetchMessages({limit: messagecount}).then(messages => KiNg66S.channel.bulkDelete(messages));
+KiNg66S.channel.sendMessage(' '+ " " + args[1] + " " +  '**: عدد الرسائل التي تم مسحه**').then(m => m.delete(2500));
+KiNg66S.delete(60000);
+}
+} else {
+var manage = new Discord.RichEmbed()
+.setDescription('You Do Not Have Permission MANAGE_MESSAGES :(')
+.setColor("RANDOM")
+KiNg66S.channel.sendEmbed(manage)
+return;
+}
+}
 });
 
 client.login(process.env.BOT_TOKEN);
